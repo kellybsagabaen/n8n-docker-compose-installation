@@ -9,32 +9,38 @@ services:
     environment:
       N8N_BASIC_AUTH_ACTIVE: true
       N8N_BASIC_AUTH_USER: admin
-      N8N_BASIC_AUTH_PASSWORD: admin123
+      N8N_BASIC_AUTH_PASSWORD_FILE: /run/secrets/n8n_basic_auth_password
       N8N_HOST: localhost
       N8N_PORT: 5678
       DB_MYSQLDB_HOST: mysql
       DB_MYSQLDB_PORT: 3306
       DB_MYSQLDB_DATABASE: n8n
       DB_MYSQLDB_USER: n8n_user
-      DB_MYSQLDB_PASSWORD: supersecret
+      DB_MYSQLDB_PASSWORD_FILE: /run/secrets/db_mysql_password
       TZ: Philippines/Manila
     volumes:
       - n8n_data:/home/node/.n8n
     depends_on:
       - mysql
+    secrets:
+      - n8n_basic_auth_password
+      - db_mysql_password
 
   mysql:
     image: mysql:8.0
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
       MYSQL_DATABASE: n8n
       MYSQL_USER: n8n_user
-      MYSQL_PASSWORD: supersecret
+      MYSQL_PASSWORD_FILE: /run/secrets/db_mysql_password
     ports:
       - 3306:3306
     volumes:
       - mysql_data:/var/lib/mysql
+    secrets:
+      - mysql_root_password
+      - db_mysql_password
 
 volumes:
   n8n_data:
@@ -45,3 +51,11 @@ volumes:
       type: none
       device: /var/log/n8n
       o: bind
+
+secrets:
+  n8n_basic_auth_password:
+    file: ./n8n_basic_auth_password.txt
+  db_mysql_password:
+    file: ./db_mysql_password.txt
+  mysql_root_password:
+    file: ./mysql_root_password.txt
