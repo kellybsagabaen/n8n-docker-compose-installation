@@ -54,8 +54,8 @@ volumes:
 
 secrets:
   n8n_basic_auth_password:
-    file: ./n8n_basic_auth_password.txt
+    file: ./n8n-docker-compose-secrets-file/n8n_basic_auth_password.txt
   db_mysql_password:
-    file: ./db_mysql_password.txt
+    file: ./n8n-docker-compose-secrets-file/db_mysql_password.txt
   mysql_root_password:
-    file: ./mysql_root_password.txt
+    file: ./n8n-docker-compose-secrets-file/mysql_root_password.txt
